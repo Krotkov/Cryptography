@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.15)
+project(Kasiski)
+
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(Kasiski Kasiski/main.cpp Kasiski/kasiski.h Kasiski/kasiski.cpp)
+
+add_executable(DES DES/main.cpp DES/des.h DES/des.cpp DES/des.h DES/des.cpp DES/main.cpp)
