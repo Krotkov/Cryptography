@@ -8,33 +8,33 @@ using namespace std;
 
 string text, key;
 
-int S[256];
+int k[256];
 
 
 string gen(const string &s) {
-    for (int i = 0; i < 256; ++i)
-        S[i] = i;
+    for (int i = 0; i < 256; ++i) {
+        k[i] = i;
+    }
     int j = 0;
     for (int i = 0; i < 256; ++i) {
-        j = (j + S[i] + key[i % key.size()]) % 256;
-        swap(S[i], S[j]);
+        j = (j + k[i] + key[i % key.size()]) % 256;
+        swap(k[i], k[j]);
     }
     int i = 0;
     j = 0;
     string ret;
     for (char t : s) {
         i = (i + 1) % 256;
-        j = (j + S[i]) % 256;
-        swap(S[i], S[j]);
-        char t1 = (S[i] + S[j]) % 256;
-        ret += t ^ S[t1];
+        j = (j + k[i]) % 256;
+        swap(k[i], k[j]);
+        ret += t ^ k[(k[i] + k[j]) % 256];
     }
     return ret;
 }
 
 int main() {
-    text = "My name is Jeff";
-    key = "My key";
+    text = "I want to krotk";
+    key = "Yourke";
     string cur = gen(text);
     cout << cur << std::endl;
     cout << gen(cur) << std::endl;

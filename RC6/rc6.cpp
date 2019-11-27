@@ -6,8 +6,6 @@ using namespace std;
 
 string key, s1;
 
-vector<string> L, S;
-
 vector<unsigned int> L_int, S_int;
 
 int get_bit_char(char x, int i) {
@@ -56,34 +54,28 @@ void gen_key() {
     string cur = to_bitstring(key);
     while (cur.size() % 32 != 0)
         cur += '0';
-    unsigned int P = 3084996963;
-    unsigned int Q = 2654435769;
+    unsigned int P = 0xB7E15163;
+    unsigned int Q = 0x9E3779B9;
     for (int i = 0; i < cur.size(); i += 32) {
-        string sl;
-        for (int j = i + 31; j >= i; j--)
-            sl += cur[j];
         unsigned int l = 0;
         for (int j = i; j < i + 32; j++)
             if (cur[j])
                 l = ((l << 1) + 1);
             else
                 l = (l << 1);
-        L.push_back(sl);
         L_int.push_back(l);
     }
-    S.push_back(to_bitstring(P));
     S_int.push_back(P);
     unsigned int val = P;
     for (int i = 1; i < 2 * 20 + 4; i++) {
         val += Q;
         S_int.push_back(val);
-        S.push_back(to_bitstring(val));
     }
     unsigned int A = 0;
     unsigned int B = 0;
     unsigned int i = 0;
     unsigned int j = 0;
-    int c = (L.size());
+    int c = (L_int.size());
     int v = 3 * max(c , 2 * 20 + 4);
     for (int q = 1; q < v; q++) {
         A = S_int[i] = left_rot((S_int[i] + A + B), 3);
@@ -93,11 +85,32 @@ void gen_key() {
     }
 }
 
+std::string to_str(unsigned int a) {
+    std::string ans;
+    ans += char(a >> 24);
+    ans += char(a >> 16);
+    ans += char(a >> 8);
+    ans += a;
+    return ans;
+}
+
 std::string ecnrypt(std::string text) {
-    unsigned int A = (((text[0] * 256 + text[1]) * 256) + text[2] * 256) + text[3];
-    unsigned int B = (((text[4] * 256 + text[5]) * 256) + text[6] * 256) + text[7];
-    unsigned int C = (((text[8] * 256 + text[9]) * 256) + text[10] * 256) + text[11];
-    unsigned int D = (((text[12] * 256 + text[13]) * 256) + text[14] * 256) + text[15];
+    unsigned int A;
+    for (int i = 0; i < 4; i++) {
+        A = (A << 8) + text[i];
+    }
+    unsigned int B;
+    for (int i = 4; i < 8; i++) {
+        B = (B << 8) + text[i];
+    }
+    unsigned int C;
+    for (int i = 8; i < 12; i++) {
+        C = (C << 8) + text[i];
+    }
+    unsigned int D;
+    for (int i = 12; i < 16; i++) {
+        D = (D << 8) + text[i];
+    }
 
     B = B + S_int[0];
     D = D + S_int[1];
@@ -116,30 +129,30 @@ std::string ecnrypt(std::string text) {
 
     std::string ans;
 
-    ans += char(A >> 24);
-    ans += char(A >> 16);
-    ans += char(A >> 8);
-    ans += A;
-    ans += char(B >> 24);
-    ans += char(B >> 16);
-    ans += char(B >> 8);
-    ans += B;
-    ans += char(C >> 24);
-    ans += char(C >> 16);
-    ans += char(C >> 8);
-    ans += C;
-    ans += char(D >> 24);
-    ans += char(D >> 16);
-    ans += char(D >> 8);
-    ans += D;
+    ans += to_str(A);
+    ans += to_str(B);
+    ans += to_str(C);
+    ans += to_str(D);
     return ans;
 }
 
 std::string decode(std::string text) {
-    unsigned int A = (((text[0] * 256 + text[1]) * 256) + text[2] * 256) + text[3];
-    unsigned int B = (((text[4] * 256 + text[5]) * 256) + text[6] * 256) + text[7];
-    unsigned int C = (((text[8] * 256 + text[9]) * 256) + text[10] * 256) + text[11];
-    unsigned int D = (((text[12] * 256 + text[13]) * 256) + text[14] * 256) + text[15];
+    unsigned int A;
+    for (int i = 0; i < 4; i++) {
+        A = (A << 8) + text[i];
+    }
+    unsigned int B;
+    for (int i = 4; i < 8; i++) {
+        B = (B << 8) + text[i];
+    }
+    unsigned int C;
+    for (int i = 8; i < 12; i++) {
+        C = (C << 8) + text[i];
+    }
+    unsigned int D;
+    for (int i = 12; i < 16; i++) {
+        D = (D << 8) + text[i];
+    }
 
     A = A - S_int[2*20+2];
     C = C - S_int[2*20+3];
@@ -158,27 +171,15 @@ std::string decode(std::string text) {
 
     std::string sl;
 
-    sl += char(A >> 24);
-    sl += char(A >> 16);
-    sl += char(A >> 8);
-    sl += A;
-    sl += char(B >> 24);
-    sl += char(B >> 16);
-    sl += char(B >> 8);
-    sl += B;
-    sl += char(C >> 24);
-    sl += char(C >> 16);
-    sl += char(C >> 8);
-    sl += C;
-    sl += char(D >> 24);
-    sl += char(D >> 16);
-    sl += char(D >> 8);
-    sl += D;
+    sl += to_str(A);
+    sl += to_str(B);
+    sl += to_str(C);
+    sl += to_str(D);
     return s1;
 }
 
 int main() {
-    key = "U2VjcmV0IGtleQ==";
+    key = "qaqawsedrftgyhuj";
     gen_key();
 
     std::string text = "abacabababaqwert";
