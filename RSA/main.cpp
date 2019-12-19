@@ -90,7 +90,6 @@ int main() {
         if (cb != -1)
             break;
     }
-    // pb = 29, qb = 31, nb = 899, fib = 840, db = 11, cb = 611;
     uint64_t firstEncStep = encAndDec(text, ca, na);
     uint64_t textEncForBob = encAndDec(firstEncStep, db, nb);
 

@@ -151,20 +151,20 @@ void A5(uint8_t *key, const std::string &Fn, uint8_t *text) {
     uint32_t R2 = 0;
     uint32_t R3 = 0;
 
-    for (int i = 0; i < 64; ++i) {
-        uint8_t bit = (key[i >> 3] >> (i & 0x7)) & 0x1;
-        R1 = (R1 & (~1)) + (R1 & 1) ^ bit;
-        R2 = (R2 & (~1)) + (R2 & 1) ^ bit;
-        R3 = (R3 & (~1)) + (R3 & 1) ^ bit;
+    for (int i = 0; i < 16; ++i) {
+        uint8_t bit = (key[i] >> (i)) & 0x1;
+        R1 = R1  ^ bit;
+        R2 = R2 ^ bit;
+        R3 = R3 ^ bit;
         R1 <<= 1;
         R2 <<= 1;
         R3 <<= 1;
     }
     for (int i = 0; i < 22; ++i) {
         uint8_t bit = Fn[i] - '0';
-        R1 = (R1 & (~1)) + (R1 & 1) ^ bit;
-        R2 = (R2 & (~1)) + (R2 & 1) ^ bit;
-        R3 = (R3 & (~1)) + (R3 & 1) ^ bit;
+        R1 = R1 ^ bit;
+        R2 = R2 ^ bit;
+        R3 = R3 ^ bit;
         R1 <<= 1;
         R2 <<= 1;
         R3 <<= 1;

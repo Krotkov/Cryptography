@@ -14,3 +14,5 @@ add_executable(RC6 RC6/rc6.cpp)
 add_executable(comp128 comp128/main.cpp)
 
 add_executable(RSA RSA/main.cpp)
+
+add_executable(blake blake/main.cpp)
